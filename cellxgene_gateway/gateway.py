@@ -15,7 +15,6 @@ import urllib.parse
 from threading import Lock, Thread
 
 from flask import (
-    Flask,
     make_response,
     redirect,
     render_template,
@@ -35,9 +34,9 @@ from cellxgene_gateway.filecrawl import render_item_source
 from cellxgene_gateway.process_exception import ProcessException
 from cellxgene_gateway.prune_process_cache import PruneProcessCache
 from cellxgene_gateway.util import current_time_stamp
+from cellxgene_gateway.flask_app import app
 import cellxgene_gateway.portable_home as p_h
-
-app = Flask(__name__)
+import cellxgene_gateway.subcell
 
 item_sources = []
 default_item_source = None
@@ -358,7 +357,7 @@ def launch():
     background_thread.start()
 
     app.launchtime = current_time_stamp()
-    app.run(host="0.0.0.0", port=env.gateway_port, debug=False)
+    app.run(host="0.0.0.0", debug=True, port=env.gateway_port)
 
 
 def main():
