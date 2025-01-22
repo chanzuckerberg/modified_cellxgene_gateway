@@ -49,12 +49,13 @@ def run_subcell(path):
     #
     # Configure Global Variables
     ## Set latest Census Version
-    version = request.form.get("version")
+    form_data = request.json
+    version = form_data.get("version")
     if not version:
         version = "2024-07-01"
-    species = request.form.get("species")
+    species = form_data.get("species")
     if not species:
-        species = "human"
+        species = "homo_sapiens"
     try:
         common_name = species_to_common_map[species]
     except KeyError:
@@ -123,7 +124,7 @@ def run_subcell(path):
 
     vae_q = scvi.model.SCVI.load_query_data(
         scvi_adata,
-        "scvi-{common_name}-{version}",
+        f"scvi-{common_name}-{version}",
     )
 
     # This allows for a simple forward pass
